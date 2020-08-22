@@ -34,8 +34,7 @@ public class Cpu {
         if ((e < base) || (e > limite)) { // valida se endereco 'e' na memoria ee posicao legal
             irpt = Interrupts.intEnderecoInvalido; // caso contrario ja liga interrupcao
             return false;
-        }
-        ;
+        };
         return true;
     }
 
@@ -53,36 +52,102 @@ public class Cpu {
                         pc++;
                         break;
 
+                    case LDD: // Rd <- k
+                        if (legal(ir.p)) {
+                            reg[ir.r1] = m[ir.p].p;
+                            pc++;
+                        };
+                        break;
+
                     case STD: // [A] <- Rs
                         if (legal(ir.p)) {
                             m[ir.p].opc = Opcode.DADO;
                             m[ir.p].p = reg[ir.r1];
                             pc++;
-                        }
-                        ;
+                        };
                         break;
+                        
+                    case STX: // [Rd] <- Rs
+                        if (legal(reg[ir.r1])) {
+                            m[reg[ir.r1]].opc = Opcode.DADO;
+                            m[reg[ir.r1]].p = reg[ir.r2];
+                            pc++;
+                        };
+                        break;                        
 
                     case ADD: // Rd <- Rd + Rs
-
+                        reg[ir.r1] += reg[ir.r2];
+                        pc++;
                         break;
 
                     case ADDI: // Rd <- Rd + k
-
-                        break;
-
-                    case STX: // [Rd] <- Rs
-
-                        break;
+                        reg[ir.r1] += ir.p;
+                        pc++;
+                        break;               
 
                     case SUB: // Rd <- Rd - Rs
+                        reg[ir.r1] -= reg[ir.r2];
+                        pc++;
+                        break;
 
+                    case SUBI: // Rd <- Rd - k
+                        reg[ir.r1] -= ir.p;
+                        pc++;
+                        break;
+
+                    case MULT: // Rd <- Rd * Rs
+                        reg[ir.r1] *= reg[ir.r2];
+                        pc++;
+                    break;
+
+                    case JMP: //PC <- k
+                        if (legal(ir.p)) {
+                            pc = ir.p;
+                        };
+                        break;
+
+                    case JMPI: // PC <- Rs
+                        if (legal(reg[ir.r1])) {
+                            pc = reg[ir.r1];
+                        };
                         break;
 
                     case JMPIG: // If Rc > 0 Then PC <- Rs Else PC <- PC +1
-
+                        if(legal(reg[ir.r1])){
+                            if(reg[ir.r2] > 0){
+                                pc = reg[ir.r1];
+                                break;
+                            }else{
+                                pc++;
+                                break;
+                            }                                            
+                        };
                         break;
-
-                    // falta entrar no switch JMP,JMPI,JMPIL,JMPIE,ADDI,ANDI,ORI,LDD,MULT,LDX,SWAP;
+                        
+                    case JMPIL: // If Rc < 0 Then PC <- Rs Else PC <- PC +1
+                        if(legal(reg[ir.r1])){
+                            if(reg[ir.r2] < 0){
+                                pc = reg[ir.r1];
+                                break;
+                            }else{
+                                pc++;
+                                break;
+                            }                                            
+                        };
+                        break;
+                        
+                    case JMPIE: // If Rc = 0 Then PC <- Rs Else PC <- PC +1
+                        if(legal(reg[ir.r1])){
+                            if(reg[ir.r2] == 0){
+                                pc = reg[ir.r1];
+                                break;
+                            }else{
+                                pc++;
+                                break;
+                            }                                            
+                        };
+                        break;
+                    // falta entrar no switch ANDI,ORI,LDX,SWAP;
 
                     case STOP: // para execucao
                         irpt = Interrupts.intSTOP;
