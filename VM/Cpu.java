@@ -53,7 +53,7 @@ public class Cpu {
                         pc++;
                         break;
 
-                    case LDD: // Rd <- k
+                    case LDD: // Rd <- [A]
                         if (legal(ir.p)) {
                             reg[ir.r1] = m[ir.p].p;
                             pc++;
@@ -80,7 +80,7 @@ public class Cpu {
                         break;
 
                     case ADD: // Rd <- Rd + Rs
-                        reg[ir.r1] += ir.p;
+                        reg[ir.r1] += reg[ir.r2];
                         pc++;
                         break;
 

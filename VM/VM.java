@@ -50,9 +50,9 @@ public class VM {
 		aux.carga(p, m);
 		cpu.setContext(0, tamMem - 1, 0);
 		System.out.println("---------------------------------- programa carregado ");
-		aux.dump(m, 0, 15);
+		aux.dump(m, 0, 30);
 		System.out.println("---------------------------------- após execucao ");
 		cpu.run();
-		aux.dump(m, 0, 15);
+		aux.dump(m, 0, 30);
 	}
 }

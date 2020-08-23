@@ -11,6 +11,7 @@ public class Auxilixar {
         System.out.print(", ");
         System.out.print(w.p);
         System.out.println("  ] ");
+
     }
 
     public void dump(Word[] m, int ini, int fim) {
