@@ -15,7 +15,7 @@ public class Cpu {
                         // nas proximas versoes isto pode modificar, e vai permitir salvar e restaurar
                         // um processo na CPU
 
-    private Word[] m; // CPU acessa MEMORIA, guarda referencia 'm' a ela. memoria nao muda. ee sempre
+    private Word[] m; // CPU acessa MEMORIA, guarda referencia 'm' a ela. memoria nao muda. E sempre
                       // a mesma.
 
     public Cpu(Word[] _m) { // ref a MEMORIA passada na criacao da CPU
@@ -24,7 +24,7 @@ public class Cpu {
     }
 
     public void setContext(int _base, int _limite, int _pc) { // no futuro esta funcao vai ter que ser
-        base = _base; // expandida para setar TODO contexto de execucao,
+        base = _base; // expandida para setar todo contexto de execucao,
         limite = _limite; // agora, setamos somente os registradores base,
         pc = _pc; // limite e pc (deve ser zero nesta versao)
         irpt = Interrupts.noInterrupt; // reset da interrupcao registrada
@@ -34,7 +34,8 @@ public class Cpu {
         if ((e < base) || (e > limite)) { // valida se endereco 'e' na memoria ee posicao legal
             irpt = Interrupts.intEnderecoInvalido; // caso contrario ja liga interrupcao
             return false;
-        };
+        }
+        ;
         return true;
     }
 
@@ -56,7 +57,8 @@ public class Cpu {
                         if (legal(ir.p)) {
                             reg[ir.r1] = m[ir.p].p;
                             pc++;
-                        };
+                        }
+                        ;
                         break;
 
                     case STD: // [A] <- Rs
@@ -64,26 +66,28 @@ public class Cpu {
                             m[ir.p].opc = Opcode.DADO;
                             m[ir.p].p = reg[ir.r1];
                             pc++;
-                        };
+                        }
+                        ;
                         break;
-                        
+
                     case STX: // [Rd] <- Rs
                         if (legal(reg[ir.r1])) {
                             m[reg[ir.r1]].opc = Opcode.DADO;
                             m[reg[ir.r1]].p = reg[ir.r2];
                             pc++;
-                        };
-                        break;                        
+                        }
+                        ;
+                        break;
 
                     case ADD: // Rd <- Rd + Rs
-                        reg[ir.r1] += reg[ir.r2];
+                        reg[ir.r1] += ir.p;
                         pc++;
                         break;
 
                     case ADDI: // Rd <- Rd + k
                         reg[ir.r1] += ir.p;
                         pc++;
-                        break;               
+                        break;
 
                     case SUB: // Rd <- Rd - Rs
                         reg[ir.r1] -= reg[ir.r2];
@@ -98,54 +102,59 @@ public class Cpu {
                     case MULT: // Rd <- Rd * Rs
                         reg[ir.r1] *= reg[ir.r2];
                         pc++;
-                    break;
+                        break;
 
-                    case JMP: //PC <- k
+                    case JMP: // PC <- k
                         if (legal(ir.p)) {
                             pc = ir.p;
-                        };
+                        }
+                        ;
                         break;
 
                     case JMPI: // PC <- Rs
                         if (legal(reg[ir.r1])) {
                             pc = reg[ir.r1];
-                        };
+                        }
+                        ;
                         break;
 
                     case JMPIG: // If Rc > 0 Then PC <- Rs Else PC <- PC +1
-                        if(legal(reg[ir.r1])){
-                            if(reg[ir.r2] > 0){
+                        if (legal(reg[ir.r1])) {
+                            if (reg[ir.r2] > 0) {
                                 pc = reg[ir.r1];
                                 break;
-                            }else{
+                            } else {
                                 pc++;
                                 break;
-                            }                                            
-                        };
+                            }
+                        }
+                        ;
                         break;
-                        
+
                     case JMPIL: // If Rc < 0 Then PC <- Rs Else PC <- PC +1
-                        if(legal(reg[ir.r1])){
-                            if(reg[ir.r2] < 0){
+                        if (legal(reg[ir.r1])) {
+                            if (reg[ir.r2] < 0) {
                                 pc = reg[ir.r1];
                                 break;
-                            }else{
+                            } else {
                                 pc++;
                                 break;
-                            }                                            
-                        };
+                            }
+                        }
+                        ;
                         break;
-                        
+
                     case JMPIE: // If Rc = 0 Then PC <- Rs Else PC <- PC +1
-                        if(legal(reg[ir.r1])){
-                            if(reg[ir.r2] == 0){
+                        if (legal(reg[ir.r1])) {
+                            if (reg[ir.r2] == 0) {
                                 pc = reg[ir.r1];
                                 break;
-                            }else{
+                            } else {
                                 pc++;
                                 break;
-                            }                                            
-                        };
+                            }
+                        }
+                        ;
                         break;
                     // falta entrar no switch ANDI,ORI,LDX,SWAP;
 

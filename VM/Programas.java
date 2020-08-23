@@ -11,4 +11,13 @@ package VM;
 			new Word(Opcode.STD, 0, -1, 14), 
 			new Word(Opcode.STOP, -1, -1, -1) 
 		};
+
+		public Word[] p2Fibonacci = new Word[] {
+			new Word(Opcode.LDI, 0, -1, 1),
+			new Word(Opcode.ADD, 0, -1, 1),
+			new Word(Opcode.STD, 0, 1, 10),
+			new Word(Opcode.STD, 0, -1, 11),
+			new Word(Opcode.STD, 0, -1, 12),
+			new Word(Opcode.STOP, -1, -1, -1) 
+		};
 	}

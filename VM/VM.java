@@ -44,4 +44,15 @@ public class VM {
 		cpu.run();
 		aux.dump(m, 0, 15);
 	}
+
+	public void p2Fibonacci() {
+		Word[] p = new Programas().p2Fibonacci;
+		aux.carga(p, m);
+		cpu.setContext(0, tamMem - 1, 0);
+		System.out.println("---------------------------------- programa carregado ");
+		aux.dump(m, 0, 15);
+		System.out.println("---------------------------------- após execucao ");
+		cpu.run();
+		aux.dump(m, 0, 15);
+	}
 }

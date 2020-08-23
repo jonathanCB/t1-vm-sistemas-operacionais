@@ -4,6 +4,6 @@ package VM;
 public class App {
 	public static void main(String args[]) {
 		VM vm = new VM();
-		vm.test1();
+		vm.p2Fibonacci();
 	}
 }
