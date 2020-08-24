@@ -38,7 +38,7 @@ public class VM {
 		cpu.setContext(0, tamMem - 1, 0);
 		System.out.println("---------------------------------- programa testes carregado ");
 		aux.dump(m, 0, 40);
-		System.out.println("---------------------------------- programa testes após execucao ");
+		System.out.println("---------------------------------- programa testes apos execucao ");
 		cpu.run();
 		aux.dump(m, 0, 40);
 	}
@@ -50,7 +50,7 @@ public class VM {
 		cpu.setContext(0, tamMem - 1, 0);
 		System.out.println("---------------------------------- programa p1 carregado ");
 		aux.dump(m, 0, 18);
-		System.out.println("---------------------------------- programa p1 após execucao ");
+		System.out.println("---------------------------------- programa p1 apos execucao ");
 		cpu.run();
 		aux.dump(m, 0, 29);
 	}	
@@ -61,7 +61,7 @@ public class VM {
 		cpu.setContext(0, tamMem - 1, 0);
 		System.out.println("---------------------------------- programa p3 carregado ");
 		aux.dump(m, 0, 30);
-		System.out.println("---------------------------------- programa p3 após execucao ");
+		System.out.println("---------------------------------- programa p3 apos execucao ");
 		cpu.run();
 		aux.dump(m, 0, 30);
 	}	

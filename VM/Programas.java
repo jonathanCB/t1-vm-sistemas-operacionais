@@ -23,7 +23,7 @@
 			new Word(Opcode.STOP, -1, -1, -1)
 		};
 		
-		//programa p1
+		//programa p1-fibonacci
 		public Word[] p1Fibonacci = new Word[] {
 			new Word(Opcode.LDI,0,-1,0),
 			new Word(Opcode.STD,0,-1,17),
@@ -44,6 +44,7 @@
 			new Word(Opcode.STOP,-1,-1,-1)
 		};	
 		
+		//programa p3-fatorial
 		public Word[] p3Fatorial = new Word[] {
 			new Word(Opcode.LDI, 0, -1, 1),
 			new Word(Opcode.LDI, 1, -1, 5),
