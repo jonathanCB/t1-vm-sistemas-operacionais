@@ -57,8 +57,14 @@ public class Cpu {
                         if (legal(ir.p)) {
                             reg[ir.r1] = m[ir.p].p;
                             pc++;
-                        }
-                        ;
+                        };
+                        break;
+
+                    case LDX: // Rd <- [Rs]
+                        if (legal(reg[ir.r2])) {
+                            reg[ir.r1] = m[reg[ir.r2]].p;
+                            pc++;
+                        };
                         break;
 
                     case STD: // [A] <- Rs
@@ -66,8 +72,7 @@ public class Cpu {
                             m[ir.p].opc = Opcode.DADO;
                             m[ir.p].p = reg[ir.r1];
                             pc++;
-                        }
-                        ;
+                        };
                         break;
 
                     case STX: // [Rd] <- Rs
@@ -75,8 +80,7 @@ public class Cpu {
                             m[reg[ir.r1]].opc = Opcode.DADO;
                             m[reg[ir.r1]].p = reg[ir.r2];
                             pc++;
-                        }
-                        ;
+                        };
                         break;
 
                     case ADD: // Rd <- Rd + Rs
@@ -95,7 +99,7 @@ public class Cpu {
                         break;
 
                     case SUBI: // Rd <- Rd - k
-                        reg[ir.r1] -= ir.p;
+                        reg[ir.r1] = reg[ir.r1]-ir.p;
                         pc++;
                         break;
 
@@ -107,15 +111,13 @@ public class Cpu {
                     case JMP: // PC <- k
                         if (legal(ir.p)) {
                             pc = ir.p;
-                        }
-                        ;
+                        };
                         break;
 
                     case JMPI: // PC <- Rs
                         if (legal(reg[ir.r1])) {
                             pc = reg[ir.r1];
-                        }
-                        ;
+                        };
                         break;
 
                     case JMPIG: // If Rc > 0 Then PC <- Rs Else PC <- PC +1
@@ -127,8 +129,7 @@ public class Cpu {
                                 pc++;
                                 break;
                             }
-                        }
-                        ;
+                        };
                         break;
 
                     case JMPIL: // If Rc < 0 Then PC <- Rs Else PC <- PC +1
@@ -140,8 +141,7 @@ public class Cpu {
                                 pc++;
                                 break;
                             }
-                        }
-                        ;
+                        };
                         break;
 
                     case JMPIE: // If Rc = 0 Then PC <- Rs Else PC <- PC +1
@@ -153,17 +153,45 @@ public class Cpu {
                                 pc++;
                                 break;
                             }
-                        }
-                        ;
+                        };
                         break;
-                    // falta entrar no switch ANDI,ORI,LDX,SWAP;
+
+                        /*
+                    case ANDI: // Rd <- Rd and k  if Rd = k -> 1 | if Rd != k -> 0
+                        if (ir.p == reg[ir.r1]) {
+                            
+                        };
+                        break;
+                        */
+
+                    case SWAP: // rd7 <- rd3  |  rd5 <- rd1  |  rd6 <- rd2  |  rd4 <- rd0
+                        int aux;
+                        aux = reg[7];
+                        reg[7] = reg[3];
+                        reg[3] = aux;
+
+                        aux = reg[5];
+                        reg[5] = reg[1];
+                        reg[1] = aux;   
+                        
+                        aux = reg[6];
+                        reg[6] = reg[2];
+                        reg[2] = aux;
+
+                        aux = reg[4];
+                        reg[4] = reg[0];
+                        reg[0] = aux;
+                        pc++;
+                        break;
+
+                    // falta entrar no switch ANDI,ORI
 
                     case STOP: // para execucao
                         irpt = Interrupts.intSTOP;
                         break;
 
                     case DADO:
-
+                        pc++;
                         break;
 
                     default:

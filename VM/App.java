@@ -4,6 +4,8 @@ package VM;
 public class App {
 	public static void main(String args[]) {
 		VM vm = new VM();
-		vm.p2Fibonacci();
+		//vm.p1Fibonacci();
+		//System.out.println("\n\n\n");
+		vm.testeProgramas();
 	}
 }

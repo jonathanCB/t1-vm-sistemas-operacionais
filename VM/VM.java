@@ -34,25 +34,26 @@ public class VM {
 
 	// -------------------------------------------- teste da VM , veja classe de
 	// programas
-	public void test1() {
-		Word[] p = new Programas().progMinimo;
+	public void testeProgramas() {
+		Word[] p = new Programas().testeProgramas;
 		aux.carga(p, m);
 		cpu.setContext(0, tamMem - 1, 0);
-		System.out.println("---------------------------------- programa carregado ");
-		aux.dump(m, 0, 15);
-		System.out.println("---------------------------------- após execucao ");
+		System.out.println("---------------------------------- programa testes carregado ");
+		aux.dump(m, 0, 40);
+		System.out.println("---------------------------------- programa testes após execucao ");
 		cpu.run();
-		aux.dump(m, 0, 15);
+		aux.dump(m, 0, 40);
 	}
 
-	public void p2Fibonacci() {
-		Word[] p = new Programas().p2Fibonacci;
+	
+	public void p1Fibonacci() {
+		Word[] p = new Programas().p1Fibonacci;
 		aux.carga(p, m);
 		cpu.setContext(0, tamMem - 1, 0);
-		System.out.println("---------------------------------- programa carregado ");
-		aux.dump(m, 0, 30);
-		System.out.println("---------------------------------- após execucao ");
+		System.out.println("---------------------------------- programa p1 carregado ");
+		aux.dump(m, 0, 18);
+		System.out.println("---------------------------------- programa p1 após execucao ");
 		cpu.run();
-		aux.dump(m, 0, 30);
-	}
+		aux.dump(m, 0, 29);
+	}	
 }
