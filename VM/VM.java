@@ -1,5 +1,3 @@
-package VM;
-
 // PUCRS, Escola Politécnica, Engenharia de Software
 // Disciplina Sistemas Operacionais
 // Prof. Fernando Luís Dotti
@@ -55,5 +53,16 @@ public class VM {
 		System.out.println("---------------------------------- programa p1 após execucao ");
 		cpu.run();
 		aux.dump(m, 0, 29);
+	}	
+
+	public void p3Fatorial() {
+		Word[] p = new Programas().p3Fatorial;
+		aux.carga(p, m);
+		cpu.setContext(0, tamMem - 1, 0);
+		System.out.println("---------------------------------- programa p3 carregado ");
+		aux.dump(m, 0, 30);
+		System.out.println("---------------------------------- programa p3 após execucao ");
+		cpu.run();
+		aux.dump(m, 0, 30);
 	}	
 }

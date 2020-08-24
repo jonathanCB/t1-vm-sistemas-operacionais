@@ -1,4 +1,4 @@
-package VM; 
+
     // -------------------------------------------- programas a disposicao para
 	// copiar na memoria (vide aux.carga)
 	public class Programas {
@@ -42,5 +42,32 @@ package VM;
 			new Word(Opcode.SUB,6,7,-1),
 			new Word(Opcode.JMPIG,5,6,-1),
 			new Word(Opcode.STOP,-1,-1,-1)
-		};			
+		};	
+		
+		public Word[] p3Fatorial = new Word[] {
+			new Word(Opcode.LDI, 0, -1, 1),
+			new Word(Opcode.LDI, 1, -1, 5),
+			new Word(Opcode.STD, 1, -1, 20),
+
+			new Word(Opcode.SUB, 1, 0, -1),
+			new Word(Opcode.STD, 1, -1, 21),
+
+			new Word(Opcode.LDD, 1, -1, 20),
+			new Word(Opcode.LDD, 2, -1, 21),
+
+			new Word(Opcode.MULT, 1, 2, -1),
+			new Word(Opcode.SUB, 2, 0, -1),	
+			new Word(Opcode.STD, 2, -1, 22),
+
+			new Word(Opcode.MULT, 1, 2, -1),
+			new Word(Opcode.SUB, 2, 0, -1),	
+			new Word(Opcode.STD, 2, -1, 23),	
+			
+			new Word(Opcode.MULT, 1, 2, -1),
+			new Word(Opcode.SUB, 2, 0, -1),	
+			new Word(Opcode.STD, 2, -1, 23),	
+
+			new Word(Opcode.STD, 1, -1, 29),
+			new Word(Opcode.STOP, -1, -1, -1) 
+		};
 	}

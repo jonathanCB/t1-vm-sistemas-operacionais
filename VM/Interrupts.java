@@ -1,5 +1,3 @@
-package VM;
-
 // --------------------- definicoes da CPU
 // ---------------------------------------------------------------
 public enum Interrupts { // possiveis interrupcoes

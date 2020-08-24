@@ -1,4 +1,3 @@
-package VM;
 
 public class Word { // cada posicao da memoria ee uma plavra, e tem uma instrucao (ou um dado)
 	public Opcode opc; //
