@@ -1,15 +1,24 @@
-
+package VM;
 // ---------------------------------------------- instancia e testa VM
 public class App {
 	public static void main(String args[]) {
-		VM vm = new VM();
-		VM vm1 = new VM();
-		VM vm2 = new VM();
-		/*VM vm3 = new VM();
-		VM vm4 = new VM();*/
-		vm.testeProgramas();
-		vm1.p1Fibonacci();
-		vm2.p3Fatorial();
+		VM vmTestes = new VM();
+		VM vmP1 = new VM();
+		VM vmP2 = new VM();
+		VM vmP3 = new VM();
+		VM vmP4 = new VM();
 
+		//vmTeste.testeProgramas();
+		/*
+		System.out.println("\n\n\n");
+		vmP1.p1Fibonacci();
+		System.out.println("\n\n\n");
+		vmP2.p2FibonacciComJMP();
+		System.out.println("\n\n\n");
+		vmP3.p3Fatorial();
+		System.out.println("\n\n\n");
+		*/
+		vmP4.p4BubbleSort();
+		System.out.println("\n\n\n");
 	}
 }

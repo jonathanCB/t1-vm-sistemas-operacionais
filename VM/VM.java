@@ -1,3 +1,5 @@
+package VM;
+
 // PUCRS, Escola Politécnica, Engenharia de Software
 // Disciplina Sistemas Operacionais
 // Prof. Fernando Luís Dotti
@@ -37,10 +39,10 @@ public class VM {
 		aux.carga(p, m);
 		cpu.setContext(0, tamMem - 1, 0);
 		System.out.println("---------------------------------- programa testes carregado ");
-		aux.dump(m, 0, 40);
+		aux.dump(m, 0, 60);
 		System.out.println("---------------------------------- programa testes apos execucao ");
 		cpu.run();
-		aux.dump(m, 0, 40);
+		aux.dump(m, 0, 60);
 	}
 
 	
@@ -53,16 +55,38 @@ public class VM {
 		System.out.println("---------------------------------- programa p1 apos execucao ");
 		cpu.run();
 		aux.dump(m, 0, 29);
-	}	
+	}
+	
+	public void p2FibonacciComJMP() {
+		Word[] p = new Programas().p2FibonacciComJMP;
+		aux.carga(p, m);
+		cpu.setContext(0, tamMem - 1, 0);
+		System.out.println("---------------------------------- programa p2 carregado ");
+		aux.dump(m, 0, 25);
+		System.out.println("---------------------------------- programa p2 apos execucao ");
+		cpu.run();
+		aux.dump(m, 0, 38);
+	}
 
 	public void p3Fatorial() {
 		Word[] p = new Programas().p3Fatorial;
 		aux.carga(p, m);
 		cpu.setContext(0, tamMem - 1, 0);
 		System.out.println("---------------------------------- programa p3 carregado ");
-		aux.dump(m, 0, 30);
+		aux.dump(m, 0, 19);
 		System.out.println("---------------------------------- programa p3 apos execucao ");
 		cpu.run();
-		aux.dump(m, 0, 30);
+		aux.dump(m, 0, 26);
+	}	
+
+	public void p4BubbleSort() {
+		Word[] p = new Programas().p4BubbleSort;
+		aux.carga(p, m);
+		cpu.setContext(0, tamMem - 1, 0);
+		System.out.println("---------------------------------- programa p4 carregado ");
+		aux.dump(m, 0, 50);
+		System.out.println("---------------------------------- programa p4 apos execucao ");
+		cpu.run();
+		aux.dump(m, 0, 50);
 	}	
 }

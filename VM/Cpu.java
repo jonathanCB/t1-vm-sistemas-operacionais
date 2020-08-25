@@ -1,3 +1,4 @@
+package VM;
 // --------------------- definicoes da CPU
 // ---------------------------------------------------------------
 public class Cpu {
@@ -97,7 +98,7 @@ public class Cpu {
                         break;
 
                     case SUBI: // Rd <- Rd - k
-                        reg[ir.r1] = reg[ir.r1]-ir.p;
+                        reg[ir.r1] -= ir.p;
                         pc++;
                         break;
 

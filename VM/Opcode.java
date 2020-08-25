@@ -1,3 +1,4 @@
+package VM;
 // --------------------- definicoes de opcode e palavra de memoria
 // ---------------------------------------
 public enum Opcode {

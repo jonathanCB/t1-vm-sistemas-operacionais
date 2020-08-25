@@ -1,4 +1,4 @@
-
+package VM;
 public class Auxilixar {
     public void dump(Word w) {
         System.out.print("[ ");
