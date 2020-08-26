@@ -4,11 +4,14 @@ package VM;
 	// copiar na memoria (vide aux.carga)
 	public class Programas {
 		public Word[] testeProgramas = new Word[] {
-			new Word(Opcode.LDI, 0, -1, 0),
-			new Word(Opcode.LDI, 1, -1, 1),
-			new Word(Opcode.LDI, 2, -1, 18), // posicao para escrita
-			new Word(Opcode.LDI, 3, -1, 10), // reg para n de fibo
-			new Word(Opcode.LDI, 7, -1, 16), // 4  //reg para stop
+			new Word(Opcode.LDI, 0, -1, 20),
+			new Word(Opcode.LDI, 1, -1, 10),
+			new Word(Opcode.STD, 0, -1, 20),
+			new Word(Opcode.STD, 1, -1, 25),
+			new Word(Opcode.SWAP, 0, 1, -1),
+			new Word(Opcode.STD, 0, -1, 21),
+			new Word(Opcode.STD, 1, -1, 26),              
+			new Word(Opcode.STOP,-1,-1,-1)
 		
 
 		};
@@ -122,7 +125,7 @@ package VM;
 
 			new Word(Opcode.LDD, 0, -1, 40), // 0 com o inicio do vetor
 			new Word(Opcode.LDD, 1, -1, 41), // 1 com o inicio +1 do vetor
-			new Word(Opcode.LDD, 2, -1, 38), // 2 com o N do vetor
+			new Word(Opcode.LDD, 2, -1, 9), // 2 com o N do vetor
 
 			//comparar se menor
 

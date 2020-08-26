@@ -47,26 +47,26 @@ public class Cpu {
                 // EXECUTA INSTRUCAO NO ir
                 switch (ir.opc) { // DADO,JMP,JMPI,JMPIG,JMPIL,JMPIE,ADDI,SUBI,ANDI,ORI,LDI,LDD,STD,ADD,SUB,MULT,LDX,STX,SWAP,STOP;
 
-                    case LDI: // Rd <- k
+                    case LDI: // R1 <- p
                         reg[ir.r1] = ir.p;
                         pc++;
                         break;
 
-                    case LDD: // Rd <- [A]
+                    case LDD: // R1 <- [p]
                         if (legal(ir.p)) {
                             reg[ir.r1] = m[ir.p].p;
                             pc++;
                         };
                         break;
 
-                    case LDX: // Rd <- [Rs]
+                    case LDX: // R1 <- [R2]
                         if (legal(reg[ir.r2])) {
                             reg[ir.r1] = m[reg[ir.r2]].p;
                             pc++;
                         };
                         break;
 
-                    case STD: // [A] <- Rs
+                    case STD: // [P] <- R1
                         if (legal(ir.p)) {
                             m[ir.p].opc = Opcode.DADO;
                             m[ir.p].p = reg[ir.r1];
@@ -74,7 +74,7 @@ public class Cpu {
                         };
                         break;
 
-                    case STX: // [Rd] <- Rs
+                    case STX: // [R1] <- R2
                         if (legal(reg[ir.r1])) {
                             m[reg[ir.r1]].opc = Opcode.DADO;
                             m[reg[ir.r1]].p = reg[ir.r2];
@@ -82,44 +82,44 @@ public class Cpu {
                         };
                         break;
 
-                    case ADD: // Rd <- Rd + Rs
+                    case ADD: // R1 <- R1 + R2
                         reg[ir.r1] += reg[ir.r2];
                         pc++;
                         break;
 
-                    case ADDI: // Rd <- Rd + k
+                    case ADDI: // R1 <- R1 + p
                         reg[ir.r1] += ir.p;
                         pc++;
                         break;
 
-                    case SUB: // Rd <- Rd - Rs
+                    case SUB: // R1 <- R1 - R2
                         reg[ir.r1] -= reg[ir.r2];
                         pc++;
                         break;
 
-                    case SUBI: // Rd <- Rd - k
+                    case SUBI: // R1 <- R1 - p
                         reg[ir.r1] -= ir.p;
                         pc++;
                         break;
 
-                    case MULT: // Rd <- Rd * Rs
+                    case MULT: // R1 <- R1 * R2
                         reg[ir.r1] *= reg[ir.r2];
                         pc++;
                         break;
 
-                    case JMP: // PC <- k
+                    case JMP: // PC <- p
                         if (legal(ir.p)) {
                             pc = ir.p;
                         };
                         break;
 
-                    case JMPI: // PC <- Rs
+                    case JMPI: // PC <- R1
                         if (legal(reg[ir.r1])) {
                             pc = reg[ir.r1];
                         };
                         break;
 
-                    case JMPIG: // If Rc > 0 Then PC <- Rs Else PC <- PC +1
+                    case JMPIG: // If R2 > 0 Then PC <- R1 Else PC <- PC +1
                         if (legal(reg[ir.r1])) {
                             if (reg[ir.r2] > 0) {
                                 pc = reg[ir.r1];
@@ -131,7 +131,7 @@ public class Cpu {
                         };
                         break;
 
-                    case JMPIL: // If Rc < 0 Then PC <- Rs Else PC <- PC +1
+                    case JMPIL: // If R2 < 0 Then PC <- R1 Else PC <- PC +1
                         if (legal(reg[ir.r1])) {
                             if (reg[ir.r2] < 0) {
                                 pc = reg[ir.r1];
@@ -143,7 +143,7 @@ public class Cpu {
                         };
                         break;
 
-                    case JMPIE: // If Rc = 0 Then PC <- Rs Else PC <- PC +1
+                    case JMPIE: // If R2 = 0 Then PC <- R1 Else PC <- PC +1
                         if (legal(reg[ir.r1])) {
                             if (reg[ir.r2] == 0) {
                                 pc = reg[ir.r1];
@@ -153,37 +153,69 @@ public class Cpu {
                                 break;
                             }
                         };
-                        break;
-
-                        /*
-                    case ANDI: // Rd <- Rd and k  if Rd = k -> 1 | if Rd != k -> 0
-                        if (ir.p == reg[ir.r1]) {
-                            
+                        break; 
+                        
+                    case JMPIM: // PC <- [p] vai para a posicao p na memoria, pega o valor de p da memoria e pula o pc para esse valor p que estiver la
+                        if (legal(ir.p)) {
+                            if (legal(m[ir.p].p)) {
+                                pc = m[ir.p].p;
+                                break;
+                            }
+                        };
+                        break;    
+                        
+                    case JMPIMG: // If R1 > 0 Then PC <- [vai para a posicao p, pega o dado p que tiver la e usa esse p como pc] Else PC <- PC +1
+                        if (legal(ir.p)) {                            
+                            if(reg[ir.r1] > 0){
+                                if (legal(m[ir.p].p)) {
+                                    pc = m[ir.p].p;
+                                    break;
+                                }
+                            }
+                            else {
+                                pc++;
+                                break;
+                            }
                         };
                         break;
-                        */
 
-                    case SWAP: // rd7 <- rd3  |  rd5 <- rd1  |  rd6 <- rd2  |  rd4 <- rd0
-                        int aux;
-                        aux = reg[7];
-                        reg[7] = reg[3];
-                        reg[3] = aux;
-
-                        aux = reg[5];
-                        reg[5] = reg[1];
-                        reg[1] = aux;   
-                        
-                        aux = reg[6];
-                        reg[6] = reg[2];
-                        reg[2] = aux;
-
-                        aux = reg[4];
-                        reg[4] = reg[0];
-                        reg[0] = aux;
-                        pc++;
+                    case JMPIML: // If R1 < 0 Then PC <- [vai para a posicao p, pega o dado p que tiver la e usa esse p como pc] Else PC <- PC +1
+                        if (legal(ir.p)) {                            
+                            if(reg[ir.r1] < 0){
+                                if (legal(m[ir.p].p)) {
+                                    pc = m[ir.p].p;
+                                    break;
+                                }
+                            }
+                            else {
+                                pc++;
+                                break;
+                            }
+                        };
                         break;
 
-                    // falta entrar no switch ANDI,ORI
+                    case JMPIME: // If R1 = 0 Then PC <- [vai para a posicao p, pega o dado p que tiver la e usa esse p como pc] Else PC <- PC +1
+                        if (legal(ir.p)) {                            
+                            if(reg[ir.r1] == 0){
+                                if (legal(m[ir.p].p)) {
+                                    pc = m[ir.p].p;
+                                    break;
+                                }
+                            }
+                            else {
+                                pc++;
+                                break;
+                            }
+                        };
+                        break;
+
+                    case SWAP: // T <- Ra | Ra <- Rb | Rb <- T
+                        int aux;
+                        aux = reg[ir.r1];
+                        reg[ir.r1] = reg[ir.r2];
+                        reg[ir.r2] = aux;
+                        pc++;
+                        break;                    
 
                     case STOP: // para execucao
                         irpt = Interrupts.intSTOP;
