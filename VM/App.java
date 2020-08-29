@@ -15,7 +15,7 @@ public class App {
 		System.out.println("\n\n\n");
 		//vmP2.p2FibonacciComJMP();
 		System.out.println("\n\n\n");
-		//vmP3.p3Fatorial();
+		vmP3.p3Fatorial();
 		System.out.println("\n\n\n");		
 		vmP4.p4BubbleSort();
 		System.out.println("\n\n\n");
