@@ -76,7 +76,7 @@ public class VM {
 		aux.dump(m, 0, 19);
 		System.out.println("---------------------------------- programa p3 apos execucao ");
 		cpu.run();
-		aux.dump(m, 0, 26);
+		aux.dump(m, 0, 30);
 	}	
 
 	public void p4BubbleSort() {
