@@ -1,6 +1,6 @@
 package VM;
 
-    // -------------------------------------------- programas a disposicao para
+// -------------------------------------------- programas a disposicao para
 	// copiar na memoria (vide aux.carga)
 	public class Programas {
 		public Word[] testeProgramas = new Word[] {
@@ -71,30 +71,34 @@ package VM;
 		
 		//programa p3-fatorial
 		public Word[] p3Fatorial = new Word[] {
-			new Word(Opcode.LDI, 0, -1, 1),
-			new Word(Opcode.LDI, 1, -1, 5),
-			new Word(Opcode.STD, 1, -1, 20),
+			new Word(Opcode.LDI, 0, -1, 1), //carrega o valor 1 no r0.
+			new Word(Opcode.LDI, 1, -1, 6), //carrega o valor 5 no r1.
+			new Word(Opcode.STD, 1, -1, 22), //carrega o que está no r1 na posição 22.
 
-			new Word(Opcode.SUB, 1, 0, -1),
-			new Word(Opcode.STD, 1, -1, 21),
+			new Word(Opcode.SUB, 1, 0, -1), //subtrai o valor que está no r1 pelo valor que está no r0(r0 será sempre 1 para cálculo do fatorial)
+			new Word(Opcode.STD, 1, -1, 23), //carrega o que está no r1 na posição 23.
 
-			new Word(Opcode.LDD, 1, -1, 20),
-			new Word(Opcode.LDD, 2, -1, 21),
+			new Word(Opcode.LDD, 1, -1, 22), //carrega o valor que está na posição 22 no r1.
+			new Word(Opcode.LDD, 2, -1, 23), //carrega o valor que está na posição 23 no r2.
+
+			new Word(Opcode.MULT, 1, 2, -1), //multiplica o valor que está dentro de r1 pelo valor que está dentro de r2.
+			new Word(Opcode.SUB, 2, 0, -1),	//subtrai o valor que está em r1 pelo valor que está em r0(1).
+			new Word(Opcode.STD, 2, -1, 24), //carrega o valor que está em r2 na posição 24.
 
 			new Word(Opcode.MULT, 1, 2, -1),
 			new Word(Opcode.SUB, 2, 0, -1),	
-			new Word(Opcode.STD, 2, -1, 22),
-
-			new Word(Opcode.MULT, 1, 2, -1),
-			new Word(Opcode.SUB, 2, 0, -1),	
-			new Word(Opcode.STD, 2, -1, 23),	
+			new Word(Opcode.STD, 2, -1, 25),	
 			
 			new Word(Opcode.MULT, 1, 2, -1),
 			new Word(Opcode.SUB, 2, 0, -1),	
-			new Word(Opcode.STD, 2, -1, 23),	
+			new Word(Opcode.STD, 2, -1, 25),	
 
-			new Word(Opcode.STD, 1, -1, 24),
-			new Word(Opcode.STOP, -1, -1, -1) 
+			new Word(Opcode.MULT, 1, 2, -1),
+			new Word(Opcode.SUB, 2, 0, -1),	
+			new Word(Opcode.STD, 2, -1, 26),
+
+			new Word(Opcode.STD, 1, -1, 27),
+			new Word(Opcode.STOP, -1, -1, -1)
 		};
 
 		//programa p4-BubbleSort
