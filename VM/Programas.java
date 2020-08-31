@@ -4,15 +4,57 @@ package VM;
 	// copiar na memoria (vide aux.carga)
 	public class Programas {
 		public Word[] testeProgramas = new Word[] {
+			new Word(Opcode.LDI, 0, -1, 12),
+			new Word(Opcode.STD, 0, -1, 40),
+
 			new Word(Opcode.LDI, 0, -1, 20),
-			new Word(Opcode.LDI, 1, -1, 10),
-			new Word(Opcode.STD, 0, -1, 20),
-			new Word(Opcode.STD, 1, -1, 25),
-			new Word(Opcode.SWAP, 0, 1, -1),
-			new Word(Opcode.STD, 0, -1, 21),
-			new Word(Opcode.STD, 1, -1, 26),              
-			new Word(Opcode.STOP,-1,-1,-1)
-		
+			new Word(Opcode.STD, 0, -1, 41),
+
+			new Word(Opcode.LDI, 0, -1, 12),
+			new Word(Opcode.STD, 0, -1, 42),
+
+			new Word(Opcode.LDI, 0, -1, 1),
+			new Word(Opcode.STD, 0, -1, 43),
+
+			new Word(Opcode.LDI, 0, -1, 29),
+			new Word(Opcode.STD, 0, -1, 44),
+			
+			new Word(Opcode.LDI, 0, -1, -12),
+			new Word(Opcode.STD, 0, -1, 45),
+
+			new Word(Opcode.LDI, 0, -1, 0),
+			new Word(Opcode.STD, 0, -1, 46),
+
+			new Word(Opcode.LDI, 3, -1, 6), 
+			new Word(Opcode.LDI, 4, -1, 6), 
+			new Word(Opcode.LDI, 5, -1, 20), 
+			new Word(Opcode.LDI, 6, -1, 33), 
+			new Word(Opcode.LDI, 7, -1, 38), 		
+			new Word(Opcode.LDI, 0, -1, 40), 
+
+			new Word(Opcode.JMPIE, 6, 3, -1), 
+
+			new Word(Opcode.SUBI, 3, -1, 1),  
+			new Word(Opcode.LDX, 1, 0, -1),  
+			new Word(Opcode.ADDI, 0, -1, 1), 
+			new Word(Opcode.LDX, 2, 0, -1), 
+			new Word(Opcode.SUB, 2, 1, -1), 
+			new Word(Opcode.JMPIG, 5, 2, -1),
+
+			new Word(Opcode.LDX, 2, 0, -1),
+			new Word(Opcode.STX, 0, 1, -1),
+			new Word(Opcode.SUBI, 0, -1, 1),
+			new Word(Opcode.STX, 0, 2, -1),
+			new Word(Opcode.ADDI, 0, -1, 1),
+			new Word(Opcode.JMPI, 5, 0 , -1),
+
+			new Word(Opcode.JMPIE, 7, 4, -1),
+			new Word(Opcode.SUBI, 4, -1, 1),
+			new Word(Opcode.LDI, 0, -1, 40),
+			new Word(Opcode.LDI, 3, -1, 6),
+			new Word(Opcode.JMPIG, 5, 0, -1),
+
+			new Word(Opcode.STOP, -1, -1, -1)
 
 		};
 		
@@ -41,7 +83,7 @@ package VM;
 
 		//programa p2 - fibonnaci com jump
 		public Word[] p2FibonacciComJMP = new Word[] {
-			new Word(Opcode.LDI, 0, -1, 10), //alterar o valor de P para negativo ou positivo
+			new Word(Opcode.LDI, 0, -1, 8), //alterar o valor de P para negativo ou positivo
 			new Word(Opcode.STD,0,-1,25),
 			new Word(Opcode.LDD, 1, -1, 25),
 			new Word(Opcode.LDI, 7, -1, 8),
@@ -100,14 +142,18 @@ package VM;
 		//programa p4-BubbleSort
 		public Word[] p4BubbleSort = new Word[] {
 					//Carregando os valores na posição 40 de memória em diante
-					new Word(Opcode.LDI, 0, -1, 9),
+					new Word(Opcode.LDI, 0, -1, 12),
 					new Word(Opcode.STD, 0, -1, 36),
+
 					new Word(Opcode.LDI, 0, -1, 20),
 					new Word(Opcode.STD, 0, -1, 37),
+
 					new Word(Opcode.LDI, 0, -1, 12),
 					new Word(Opcode.STD, 0, -1, 38),
+
 					new Word(Opcode.LDI, 0, -1, 1),
 					new Word(Opcode.STD, 0, -1, 39),
+
 					new Word(Opcode.LDI, 0, -1, 29),
 					new Word(Opcode.STD, 0, -1, 40),
 					
