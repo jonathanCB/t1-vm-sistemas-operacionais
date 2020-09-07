@@ -1,60 +1,8 @@
-package VM;
-
 // -------------------------------------------- programas a disposicao para
 	// copiar na memoria (vide aux.carga)
 	public class Programas {
-		public Word[] testeProgramas = new Word[] {
-			new Word(Opcode.LDI, 0, -1, 12),
-			new Word(Opcode.STD, 0, -1, 40),
-
-			new Word(Opcode.LDI, 0, -1, 20),
-			new Word(Opcode.STD, 0, -1, 41),
-
-			new Word(Opcode.LDI, 0, -1, 12),
-			new Word(Opcode.STD, 0, -1, 42),
-
-			new Word(Opcode.LDI, 0, -1, 1),
-			new Word(Opcode.STD, 0, -1, 43),
-
-			new Word(Opcode.LDI, 0, -1, 29),
-			new Word(Opcode.STD, 0, -1, 44),
-			
-			new Word(Opcode.LDI, 0, -1, -12),
-			new Word(Opcode.STD, 0, -1, 45),
-
-			new Word(Opcode.LDI, 0, -1, 0),
-			new Word(Opcode.STD, 0, -1, 46),
-
-			new Word(Opcode.LDI, 3, -1, 6), 
-			new Word(Opcode.LDI, 4, -1, 6), 
-			new Word(Opcode.LDI, 5, -1, 20), 
-			new Word(Opcode.LDI, 6, -1, 33), 
-			new Word(Opcode.LDI, 7, -1, 38), 		
-			new Word(Opcode.LDI, 0, -1, 40), 
-
-			new Word(Opcode.JMPIE, 6, 3, -1), 
-
-			new Word(Opcode.SUBI, 3, -1, 1),  
-			new Word(Opcode.LDX, 1, 0, -1),  
-			new Word(Opcode.ADDI, 0, -1, 1), 
-			new Word(Opcode.LDX, 2, 0, -1), 
-			new Word(Opcode.SUB, 2, 1, -1), 
-			new Word(Opcode.JMPIG, 5, 2, -1),
-
-			new Word(Opcode.LDX, 2, 0, -1),
-			new Word(Opcode.STX, 0, 1, -1),
-			new Word(Opcode.SUBI, 0, -1, 1),
-			new Word(Opcode.STX, 0, 2, -1),
-			new Word(Opcode.ADDI, 0, -1, 1),
-			new Word(Opcode.JMPI, 5, 0 , -1),
-
-			new Word(Opcode.JMPIE, 7, 4, -1),
-			new Word(Opcode.SUBI, 4, -1, 1),
-			new Word(Opcode.LDI, 0, -1, 40),
-			new Word(Opcode.LDI, 3, -1, 6),
-			new Word(Opcode.JMPIG, 5, 0, -1),
-
-			new Word(Opcode.STOP, -1, -1, -1)
+		public Word[] testeProgramas = new Word[] {			
+						
 
 		};
 		
@@ -113,79 +61,91 @@ package VM;
 		
 		//programa p3-fatorial
 		public Word[] p3Fatorial = new Word[] {
-			new Word(Opcode.LDI, 0, -1, 1), //carrega o valor 1 no r0.
-			new Word(Opcode.LDI, 1, -1, 6), //carrega o valor 5 no r1.
-			new Word(Opcode.STD, 1, -1, 22), //carrega o que está no r1 na posição 22.
+			new Word(Opcode.LDI, 0, -1, 5), //alterar o valor de P para negativo ou positivo
+			new Word(Opcode.STD,0,-1,30),
+			new Word(Opcode.LDD, 1, -1, 30),
+			new Word(Opcode.LDI, 7, -1, 11), // registrador com o valor de inicio do programa
+			new Word(Opcode.LDI, 6, -1, 18), // registrador com o valor de inicio do programa caso o n seja zero
+			new Word(Opcode.LDI, 5, -1, 21), // registrador com o valor de inicio do programa caso o n seja 1
+			new Word(Opcode.JMPIG, 7, 1, -1),
+			new Word(Opcode.JMPIE, 6, 1, -1),
+			new Word(Opcode.LDI, 3, -1, -1),
+			new Word(Opcode.STD,3,-1,31),
+			new Word(Opcode.STOP, -1, -1, -1), // 10
 
-			new Word(Opcode.SUB, 1, 0, -1), //subtrai o valor que está no r1 pelo valor que está no r0(r0 será sempre 1 para cálculo do fatorial)
-			new Word(Opcode.STD, 1, -1, 23), //carrega o que está no r1 na posição 23.
+			new Word(Opcode.LDI, 4, -1, 16), //valor com o inicio do loop
+			new Word(Opcode.LDD, 0, -1, 30), // carrega o valor do fatorial
+			new Word(Opcode.LDD, 1, -1, 30), // carrega o valor do fatorial
+			new Word(Opcode.SUBI, 1, -1, 1), // diminui 1 de r1
+			new Word(Opcode.JMPIE, 5, 1, -1), // 15
 
-			new Word(Opcode.LDD, 1, -1, 22), //carrega o valor que está na posição 22 no r1.
-			new Word(Opcode.LDD, 2, -1, 23), //carrega o valor que está na posição 23 no r2.
+			new Word(Opcode.MULT,0,1,-1), // inicio do loop
+			new Word(Opcode.SUBI, 1, -1, 1),
+			new Word(Opcode.JMPIG, 4, 1, -1), // teste
+			new Word(Opcode.STD,0,-1,31),
+			new Word(Opcode.STOP, -1, -1, -1),
 
-			new Word(Opcode.MULT, 1, 2, -1), //multiplica o valor que está dentro de r1 pelo valor que está dentro de r2.
-			new Word(Opcode.SUB, 2, 0, -1),	//subtrai o valor que está em r1 pelo valor que está em r0(1).
-			new Word(Opcode.STD, 2, -1, 24), //carrega o valor que está em r2 na posição 24.
+			new Word(Opcode.LDI, 0, -1, 1), // caso n zero
+			new Word(Opcode.STD,0,-1,31),
+			new Word(Opcode.STOP, -1, -1, -1),
 
-			new Word(Opcode.MULT, 1, 2, -1),
-			new Word(Opcode.SUB, 2, 0, -1),	
-			new Word(Opcode.STD, 2, -1, 25),	
-			
-			new Word(Opcode.MULT, 1, 2, -1),
-			new Word(Opcode.SUB, 2, 0, -1),	
-			new Word(Opcode.STD, 2, -1, 25),	
-
-			new Word(Opcode.MULT, 1, 2, -1),
-			new Word(Opcode.SUB, 2, 0, -1),	
-			new Word(Opcode.STD, 2, -1, 26),
-
-			new Word(Opcode.STD, 1, -1, 27),
-			new Word(Opcode.STOP, -1, -1, -1)
+			new Word(Opcode.LDI, 0, -1, 1), // caso n 1
+			new Word(Opcode.STD,0,-1,31),
+			new Word(Opcode.STOP, -1, -1, -1) 
 		};
 
 		//programa p4-BubbleSort
 		public Word[] p4BubbleSort = new Word[] {
-					//Carregando os valores na posição 40 de memória em diante
-					new Word(Opcode.LDI, 0, -1, 12),
-					new Word(Opcode.STD, 0, -1, 36),
+			new Word(Opcode.LDI, 0, -1, 12),  //carregando valor na memoria
+			new Word(Opcode.STD, 0, -1, 40),
 
-					new Word(Opcode.LDI, 0, -1, 20),
-					new Word(Opcode.STD, 0, -1, 37),
+			new Word(Opcode.LDI, 0, -1, 20),
+			new Word(Opcode.STD, 0, -1, 41),
 
-					new Word(Opcode.LDI, 0, -1, 12),
-					new Word(Opcode.STD, 0, -1, 38),
+			new Word(Opcode.LDI, 0, -1, 12),
+			new Word(Opcode.STD, 0, -1, 42),
 
-					new Word(Opcode.LDI, 0, -1, 1),
-					new Word(Opcode.STD, 0, -1, 39),
+			new Word(Opcode.LDI, 0, -1, 1),
+			new Word(Opcode.STD, 0, -1, 43),
 
-					new Word(Opcode.LDI, 0, -1, 29),
-					new Word(Opcode.STD, 0, -1, 40),
-					
-					new Word(Opcode.LDI, 3, -1, 4),
-					new Word(Opcode.LDI, 4, -1, 4),
-					new Word(Opcode.LDI, 5, -1, 16),
-					new Word(Opcode.LDI, 6, -1, 29),
-					new Word(Opcode.LDI, 7, -1, 34),
-		
-					new Word(Opcode.LDI, 0, -1, 36),
-					new Word(Opcode.JMPIE, 6, 3, -1),
-					new Word(Opcode.SUBI, 3, -1, 1),
-					new Word(Opcode.LDX, 1, 0, -1),
-					new Word(Opcode.ADDI, 0, -1, 1),
-					new Word(Opcode.LDX, 2, 0, -1),
-					new Word(Opcode.SUB, 2, 1, -1),
-					new Word(Opcode.JMPIG, 5, 2, -1),
-					new Word(Opcode.LDX, 2, 0, -1),
-					new Word(Opcode.STX, 0, 1, -1),
-					new Word(Opcode.SUBI, 0, -1, 1),
-					new Word(Opcode.STX, 0, 2, -1),
-					new Word(Opcode.ADDI, 0, -1, 1),
-					new Word(Opcode.JMPI, 5, 0 , -1),
-					new Word(Opcode.JMPIE, 7, 4, -1),
-					new Word(Opcode.SUBI, 4, -1, 1),
-					new Word(Opcode.LDI, 0, -1, 36),
-					new Word(Opcode.LDI, 3, -1, 4),
-					new Word(Opcode.JMPIG, 5, 0, -1),
-					new Word(Opcode.STOP, -1, -1, -1)
+			new Word(Opcode.LDI, 0, -1, 29),
+			new Word(Opcode.STD, 0, -1, 44),
+			
+			new Word(Opcode.LDI, 0, -1, -12),
+			new Word(Opcode.STD, 0, -1, 45),
+
+			new Word(Opcode.LDI, 0, -1, 0),
+			new Word(Opcode.STD, 0, -1, 46),// valores carregados
+
+			new Word(Opcode.LDI, 3, -1, 6), 
+			new Word(Opcode.LDI, 4, -1, 6), 
+			new Word(Opcode.LDI, 5, -1, 20), 
+			new Word(Opcode.LDI, 6, -1, 33), 
+			new Word(Opcode.LDI, 7, -1, 38), 		
+			new Word(Opcode.LDI, 0, -1, 40), 
+
+			new Word(Opcode.JMPIE, 6, 3, -1), //inicio loop
+
+			new Word(Opcode.SUBI, 3, -1, 1),  
+			new Word(Opcode.LDX, 1, 0, -1),  
+			new Word(Opcode.ADDI, 0, -1, 1), 
+			new Word(Opcode.LDX, 2, 0, -1), 
+			new Word(Opcode.SUB, 2, 1, -1), 
+			new Word(Opcode.JMPIG, 5, 2, -1),
+
+			new Word(Opcode.LDX, 2, 0, -1),
+			new Word(Opcode.STX, 0, 1, -1),
+			new Word(Opcode.SUBI, 0, -1, 1),
+			new Word(Opcode.STX, 0, 2, -1),
+			new Word(Opcode.ADDI, 0, -1, 1),
+			new Word(Opcode.JMPI, 5, 0 , -1),
+
+			new Word(Opcode.JMPIE, 7, 4, -1),
+			new Word(Opcode.SUBI, 4, -1, 1),
+			new Word(Opcode.LDI, 0, -1, 40),
+			new Word(Opcode.LDI, 3, -1, 6),
+			new Word(Opcode.JMPIG, 5, 0, -1),//fim do loop
+
+			new Word(Opcode.STOP, -1, -1, -1)
 		};
 	}
