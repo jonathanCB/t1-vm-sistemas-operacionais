@@ -1,5 +1,5 @@
 // -------------------------------------------- programas a disposicao para
-	// copiar na memoria (vide aux.carga)
+	// copiar na memoria (vide gerente de meoria. aloca)
 	public class Programas {
 		public Word[] testeProgramas = new Word[] {			
 						

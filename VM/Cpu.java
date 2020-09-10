@@ -1,30 +1,52 @@
-// --------------------- definicoes da CPU
-// ---------------------------------------------------------------
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+// --------------------- definicoes da CPU ---------------------------------------------------------------
 public class Cpu {
     // característica do processador: contexto da CPU ...
     private int pc; // ... composto de program counter,
+    private int posMemo; // ... posicao da memoria do programa,
     private Word ir; // instruction register,
     private int[] reg; // registradores da CPU
     private Interrupts irpt; // durante instrucao, interrupcao pode ser sinalizada
     private int base; // base e limite de acesso na memoria
+    private List<Integer> pagiProg; // tem a os frames de um programa
+    private Word[] m; // CPU acessa MEMORIA, guarda referencia 'm' a ela. memoria nao muda. Eh sempre a mesma.
     private int limite; // por enquanto toda memoria pode ser acessada pelo processo rodando
                         // ATE AQUI: contexto da CPU - tudo que precisa sobre o estado de um processo
                         // para executar
                         // nas proximas versoes isto pode modificar, e vai permitir salvar e restaurar
                         // um processo na CPU
 
-    private Word[] m; // CPU acessa MEMORIA, guarda referencia 'm' a ela. memoria nao muda. E sempre
-                      // a mesma.
-
-    public Cpu(Word[] _m) { // ref a MEMORIA passada na criacao da CPU
-        m = _m; // usa o atributo 'm' para acessar a memoria.
+    public Cpu(Word[] m) { // ref a MEMORIA passada na criacao da CPU
+        this.m = m; // usa o atributo 'm' para acessar a memoria.
         reg = new int[8]; // aloca o espaço dos registradores
     }
 
-    public void setContext(int _base, int _limite, int _pc) { // no futuro esta funcao vai ter que ser
-        base = _base; // expandida para setar todo contexto de execucao,
-        limite = _limite; // agora, setamos somente os registradores base,
-        pc = _pc; // limite e pc (deve ser zero nesta versao)
+    // salva as paginas de um programa 
+    private void setPaginas(String ID){
+        pagiProg = new ArrayList<>();
+        for(paginas it: VM.todasPagi){
+            if(it.ID == ID){
+                for(Integer p: it.getLista()){
+                    pagiProg.add(p);
+                }
+            }
+        }
+    }
+    
+    //traduz o endereço logico para o endereco de memoria do programa
+    private int traduz(int pc){
+        posMemo = (pagiProg.get(pc/VM.tamPagi)*VM.tamPagi)+(pc%VM.tamPagi);
+        return posMemo;
+    }    
+
+    public void setContext(int base, int limite, int pc, String ID) { // no futuro esta funcao vai ter que ser
+        setPaginas(ID);
+        this.base = base; // expandida para setar todo contexto de execucao,
+        this.limite = limite; // agora, setamos somente os registradores base,
+        this.pc = pc; // limite e pc (deve ser zero nesta versao)
         irpt = Interrupts.noInterrupt; // reset da interrupcao registrada
     }
 
@@ -32,8 +54,7 @@ public class Cpu {
         if ((e < base) || (e > limite)) { // valida se endereco 'e' na memoria ee posicao legal
             irpt = Interrupts.intEnderecoInvalido; // caso contrario ja liga interrupcao
             return false;
-        }
-        ;
+        };
         return true;
     }
 
@@ -42,7 +63,7 @@ public class Cpu {
         while (true) { // ciclo de instrucoes. acaba cfe instrucao, veja cada caso.
             // FETCH
             if (legal(pc)) { // pc valido
-                ir = m[pc]; // busca posicao da memoria apontada por pc, guarda em ir
+                ir = m[traduz(pc)]; // busca posicao da memoria apontada por pc, guarda em ir
                 // EXECUTA INSTRUCAO NO ir
                 switch (ir.opc) { // DADO,JMP,JMPI,JMPIG,JMPIL,JMPIE,ADDI,SUBI,ANDI,ORI,LDI,LDD,STD,ADD,SUB,MULT,LDX,STX,SWAP,STOP;
 
@@ -53,30 +74,30 @@ public class Cpu {
 
                     case LDD: // R1 <- [p]
                         if (legal(ir.p)) {
-                            reg[ir.r1] = m[ir.p].p;
+                            reg[ir.r1] = m[traduz(ir.p)].p;
                             pc++;
                         };
                         break;
 
                     case LDX: // R1 <- [R2]
                         if (legal(reg[ir.r2])) {
-                            reg[ir.r1] = m[reg[ir.r2]].p;
+                            reg[ir.r1] = m[traduz(reg[ir.r2])].p;
                             pc++;
                         };
                         break;
 
                     case STD: // [P] <- R1
                         if (legal(ir.p)) {
-                            m[ir.p].opc = Opcode.DADO;
-                            m[ir.p].p = reg[ir.r1];
+                            m[traduz(ir.p)].opc = Opcode.DADO;
+                            m[traduz(ir.p)].p = reg[ir.r1];
                             pc++;
                         };
                         break;
 
                     case STX: // [R1] <- R2
                         if (legal(reg[ir.r1])) {
-                            m[reg[ir.r1]].opc = Opcode.DADO;
-                            m[reg[ir.r1]].p = reg[ir.r2];
+                            m[traduz(reg[ir.r1])].opc = Opcode.DADO;
+                            m[traduz(reg[ir.r1])].p = reg[ir.r2];
                             pc++;
                         };
                         break;
@@ -156,8 +177,8 @@ public class Cpu {
                         
                     case JMPIM: // PC <- [p] vai para a posicao p na memoria, pega o valor de p da memoria e pula o pc para esse valor p que estiver la
                         if (legal(ir.p)) {
-                            if (legal(m[ir.p].p)) {
-                                pc = m[ir.p].p;
+                            if (legal(m[traduz(ir.p)].p)) {
+                                pc = m[traduz(ir.p)].p;
                                 break;
                             }
                         };
@@ -166,8 +187,8 @@ public class Cpu {
                     case JMPIMG: // If R1 > 0 Then PC <- [vai para a posicao p, pega o dado p que tiver la e usa esse p como pc] Else PC <- PC +1
                         if (legal(ir.p)) {                            
                             if(reg[ir.r1] > 0){
-                                if (legal(m[ir.p].p)) {
-                                    pc = m[ir.p].p;
+                                if (legal(m[traduz(ir.p)].p)) {
+                                    pc = m[traduz(ir.p)].p;
                                     break;
                                 }
                             }
@@ -181,8 +202,8 @@ public class Cpu {
                     case JMPIML: // If R1 < 0 Then PC <- [vai para a posicao p, pega o dado p que tiver la e usa esse p como pc] Else PC <- PC +1
                         if (legal(ir.p)) {                            
                             if(reg[ir.r1] < 0){
-                                if (legal(m[ir.p].p)) {
-                                    pc = m[ir.p].p;
+                                if (legal(m[traduz(ir.p)].p)) {
+                                    pc = m[traduz(ir.p)].p;
                                     break;
                                 }
                             }
@@ -196,8 +217,8 @@ public class Cpu {
                     case JMPIME: // If R1 = 0 Then PC <- [vai para a posicao p, pega o dado p que tiver la e usa esse p como pc] Else PC <- PC +1
                         if (legal(ir.p)) {                            
                             if(reg[ir.r1] == 0){
-                                if (legal(m[ir.p].p)) {
-                                    pc = m[ir.p].p;
+                                if (legal(m[traduz(ir.p)].p)) {
+                                    pc = m[traduz(ir.p)].p;
                                     break;
                                 }
                             }
