@@ -1,25 +1,32 @@
-import java.util.List;
+/*
+faz a particao da memoria em frames, a partir de informaçoes obtidas da VM
+aloca programas na memoria, envia esses programas em forma de processo para o process control block
+desaloca esses programas da memoria e avisa o process control block que o programa foi desalocado
+dump da memoria
+*/
 
 public class gerenteDeMemoria {
-    private boolean status;  //true = livre //false = ocupado
-    private int quantFrames;
     private int nPagi;
-    public static boolean[] memoria;
-
-    public void dump(Word w) {
-        System.out.print("[ " + w.opc + ", " + w.r1 + ", " + w.r2 + ", " + w.p + " ] " + "\n");
-    }
-
+    public static boolean[] frames;
+    
+    //contrutor do gerente de memoria, ao ser iniciado cria os frames a partir do tamanho da memoria / pelo tamanho da pagina, e inicia todos os frames com true ou false
     public gerenteDeMemoria() {
-        quantFrames = (VM.tamMem / VM.tamPagi);
-        memoria = new boolean[quantFrames];
-        status = true;
-        for (int i = 0; i < memoria.length; i++) {
-            memoria[i] = status;         
+        for (int i = 0; i < VM.m.length; i++) {
+			VM.m[i] = new Word(Opcode.___, -1, -1, -1);
+		};
+        frames = new boolean[(VM.tamMem / VM.tamPagi)];
+        for (int i = 0; i < frames.length; i++) {
+            if(i%2 == 0){
+                frames[i] = false;  // false = ocupado || true = livre
+            }else{
+                frames[i] = true;
+            }        
         }
     }
 
-    public boolean alocacao(Word[] p, Word[] m, int tamProg, String ID) {
+    //ao receber um programa, calcula o tamanho dele, se tiver espaço, aloca em memoria
+    //tambem cria um processo com o ID do programa e as paginas onde esse programa esta em memoria
+    public boolean alocacao(Word[] p, int tamProg, int ID) {
         if(tamProg%VM.tamPagi == 0){
             nPagi = ((tamProg/VM.tamPagi));
         }
@@ -28,26 +35,26 @@ public class gerenteDeMemoria {
         }
         int cont = 0;
         int posProg = 0;        
-        for(int i=0; i<memoria.length; i++){
-            if(memoria[i] == true){
+        for(int i=0; i<frames.length; i++){
+            if(frames[i] == true){
                 cont++;
             }
         }
         if(cont >= nPagi){                        
             cont = 0;
-            VM.todasPagi.add(new paginas(ID));
-            int pos = VM.todasPagi.size()-1;
-            for(int i=0; i<memoria.length; i++){
-                if(memoria[i] == true){
+            processControlBlock.TodosProcessos.add(new processo(ID));
+            int pos = processControlBlock.TodosProcessos.size()-1;
+            for(int i=0; i<frames.length; i++){
+                if(frames[i] == true){
                     cont++;
-                    memoria[i] = false;
-                    VM.todasPagi.get(pos).addPagina(i);
+                    frames[i] = false;
+                    processControlBlock.TodosProcessos.get(pos).addPagina(i);
                     for (int j=(i*VM.tamPagi); j<(i+1)*VM.tamPagi; j++) {
                         if(posProg < p.length){
-                            m[j].opc = p[posProg].opc;
-                            m[j].r1 = p[posProg].r1;
-                            m[j].r2 = p[posProg].r2;
-                            m[j].p = p[posProg].p;
+                            VM.m[j].opc = p[posProg].opc;
+                            VM.m[j].r1 = p[posProg].r1;
+                            VM.m[j].r2 = p[posProg].r2;
+                            VM.m[j].p = p[posProg].p;
                             posProg++;
                         }
                         else{
@@ -63,16 +70,15 @@ public class gerenteDeMemoria {
         return false;
     }
 
-    public static void desaloca(String ID){
-        int posExcluir = 0;
-        for(int i=0; i<VM.todasPagi.size(); i++){
-            if(VM.todasPagi.get(i).ID == ID){
-                posExcluir = i;
-                List<Integer> pg = VM.todasPagi.get(i).getLista();
-                for(Integer p: pg){
-                    for(int j=0; j<memoria.length; j++){
+    //dado o id de um processo, o gerente de memoria, troca os frames com false(ocupado) para true(livre)
+    //tambem avisa o PCB qual o id do processo que foi desalocado
+    public static void desaloca(int ID){
+        for(int i=0; i<processControlBlock.TodosProcessos.size(); i++){
+            if(processControlBlock.TodosProcessos.get(i).ID == ID){
+                for(Integer p: processControlBlock.TodosProcessos.get(i).getLista()){
+                    for(int j=0; j<frames.length; j++){
                         if(p == j){
-                            memoria[j] = true;
+                            frames[j] = true;
                             for (int k=(j*VM.tamPagi); k<(j+1)*VM.tamPagi; k++) {
                                 VM.m[k] = new Word(Opcode.___, -1, -1, -1);
                             }
@@ -81,9 +87,15 @@ public class gerenteDeMemoria {
                 }
             }            
         }
-        VM.todasPagi.remove(posExcluir);
+        processControlBlock.encerraProcesso(ID);
     }
 
+    // formata a impressao do dump de memoria
+    public void dump(Word w) {
+    System.out.print("[ " + w.opc + ", " + w.r1 + ", " + w.r2 + ", " + w.p + " ] " + "\n");
+    }
+
+    //imprime umm dump da memoria, na posicao ini até o fim informado por parametro
     public void dump(Word[] m, int ini, int fim) {
         for (int i = ini; i < fim; i++) {
             System.out.print(i + ": ");

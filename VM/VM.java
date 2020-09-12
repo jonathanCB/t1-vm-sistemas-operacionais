@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
-
 // PUCRS, Escola Politécnica, Engenharia de Software
 // Disciplina Sistemas Operacionais
 // Prof. Fernando Luís Dotti
@@ -20,17 +17,17 @@ public class VM {
 	public static int tamMem;
 	public static int tamPagi;
 	public static Word[] m;
-    public static List<paginas> todasPagi = new ArrayList<>();
-	public Cpu cpu;
-	public gerenteDeMemoria gm;
+	public static Cpu cpu;
+	public static gerenteDeMemoria gm;
+	public static processControlBlock pcb;
 
+	//inicia a VM, com o tamanho da memoria informado, o tamanho da pagina da memoria
+	//cria um processes control block, um gerente de memoria e uma cpu
 	public VM() {
 		tamMem = 1024;  // colocar o tamanho da memoria
 		tamPagi = 16; //colocar o tamanho da pagina		
 		m = new Word[tamMem]; // m ee a memoria
-		for (int i = 0; i < tamMem; i++) {
-			m[i] = new Word(Opcode.___, -1, -1, -1);
-		};
+		pcb = new processControlBlock();
 		gm = new gerenteDeMemoria();
 		cpu = new Cpu(m);		
 	}
@@ -50,9 +47,9 @@ public class VM {
 	}
 */
 
-	// recebe o id do programa, seta o contexto na cpu e executa
-	public void cpuRunProg(String ID){
-		for(paginas it: todasPagi){
+	// recebe o id do programa, seta o contexto na cpu e executa o programa
+	public void cpuRunProg(int ID){
+		for(processo it: processControlBlock.TodosProcessos){
 			if(it.ID == ID){
 				cpu.setContext(0, tamMem - 1, 0, ID);
 				cpu.run();
@@ -60,69 +57,34 @@ public class VM {
 		}
 	}
 	
-	public void p1Fibonacci(String ID) {
+	public void p1Fibonacci(int ID) {
 		int tamProg = 29;  //colocar o tamanho do programa
-		String idProg = ID;  //colocar o id do programa
 		Word[] p = new Programas().p1Fibonacci;
-		gm.alocacao(p, m, tamProg, idProg);
-		//cpu.setContext(0, tamMem - 1, 0, "p1");
-		//System.out.println("---------------------------------- programa p1 carregado ");
-		//gm.dump(m, 0, 18);
-		//System.out.println("---------------------------------- programa p1 apos execucao ");
-		//cpu.run();
-		//gm.dump(m, 0, tamProg);
+		gm.alocacao(p, tamProg, ID);
 	}
 
-	public void p1Fibonacci2(String ID) {
+	public void p1Fibonacci2(int ID) {
 		int tamProg = 29;  //colocar o tamanho do programa
-		String idProg = ID;  //colocar o id do programa
 		Word[] p = new Programas().p1Fibonacci;
-		gm.alocacao(p, m, tamProg, idProg);
-		//cpu.setContext(0, tamMem - 1, 0, "p1.2");
-		//System.out.println("---------------------------------- programa p1 carregado ");
-		//gm.dump(m, 0, 18);
-		//System.out.println("---------------------------------- programa p1 apos execucao ");
-		//cpu.run();
-		//gm.dump(m, 0, tamProg);
+		gm.alocacao(p, tamProg, ID);
 	}
 	
-	public void p2FibonacciComJMP(String ID) {
+	public void p2FibonacciComJMP(int ID) {
 		int tamProg = 36;  //colocar o tamanho do programa
-		String idProg = ID;  //colocar o id do programa
 		Word[] p = new Programas().p2FibonacciComJMP;
-		gm.alocacao(p, m, tamProg, idProg);
-		//cpu.setContext(0, tamMem - 1, 0, "p2");
-		//System.out.println("---------------------------------- programa p2 carregado ");
-		//gm.dump(m, 0, 25);
-		//System.out.println("---------------------------------- programa p2 apos execucao ");
-		//cpu.run();
-		//gm.dump(m, 0, tamProg);
+		gm.alocacao(p, tamProg, ID);
 	}
 
-	public void p3Fatorial(String ID) {
+	public void p3Fatorial(int ID) {
 		int tamProg = 33;  //colocar o tamanho do programa
-		String idProg = ID;  //colocar o id do programa
 		Word[] p = new Programas().p3Fatorial;
-		gm.alocacao(p, m, tamProg, idProg);
-		//cpu.setContext(0, tamMem - 1, 0, "p3");
-		//System.out.println("---------------------------------- programa p3 carregado ");
-		//gm.dump(m, 0, 28);
-		//System.out.println("---------------------------------- programa p3 apos execucao ");
-		//cpu.run();
-		//gm.dump(m, 0, tamProg);
+		gm.alocacao(p, tamProg, ID);
 	}	
 
-	public void p4BubbleSort(String ID) {
+	public void p4BubbleSort(int ID) {
 		int tamProg = 48;  //colocar o tamanho do programa
-		String idProg = ID;  //colocar o id do programa
 		Word[] p = new Programas().p4BubbleSort;
-		gm.alocacao(p, m, tamProg, idProg);
-		//cpu.setContext(0, tamMem - 1, 0, "p4");
-		//System.out.println("---------------------------------- programa p4 carregado ");
-		//gm.dump(m, 0, 40);
-		//System.out.println("---------------------------------- programa p4 apos execucao ");
-		//cpu.run();
-		//gm.dump(m, 0, tamProg);
+		gm.alocacao(p, tamProg, ID);
 	}
 		
 }

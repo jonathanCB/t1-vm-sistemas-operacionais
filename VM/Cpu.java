@@ -1,12 +1,10 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 // --------------------- definicoes da CPU ---------------------------------------------------------------
 public class Cpu {
     // característica do processador: contexto da CPU ...
     private int pc; // ... composto de program counter,
-    private int posMemo; // ... posicao da memoria do programa,
     private Word ir; // instruction register,
     private int[] reg; // registradores da CPU
     private Interrupts irpt; // durante instrucao, interrupcao pode ser sinalizada
@@ -24,10 +22,10 @@ public class Cpu {
         reg = new int[8]; // aloca o espaço dos registradores
     }
 
-    // salva as paginas de um programa 
-    private void setPaginas(String ID){
+    // salva as paginas de um programa em uma lista temporaria dentro do cpu
+    private void setPaginas(int ID){
         pagiProg = new ArrayList<>();
-        for(paginas it: VM.todasPagi){
+        for(processo it: processControlBlock.TodosProcessos){
             if(it.ID == ID){
                 for(Integer p: it.getLista()){
                     pagiProg.add(p);
@@ -37,12 +35,14 @@ public class Cpu {
     }
     
     //traduz o endereço logico para o endereco de memoria do programa
-    private int traduz(int pc){
-        posMemo = (pagiProg.get(pc/VM.tamPagi)*VM.tamPagi)+(pc%VM.tamPagi);
-        return posMemo;
+    // verifica a validade do endereco a cada traducao, caso seja invalido, interrompe o programa
+    private int traduz(int pc){        
+        legalTrad(pagiProg.get(pc/VM.tamPagi));
+        return (pagiProg.get(pc/VM.tamPagi)*VM.tamPagi)+(pc%VM.tamPagi); 
     }    
 
-    public void setContext(int base, int limite, int pc, String ID) { // no futuro esta funcao vai ter que ser
+    
+    public void setContext(int base, int limite, int pc, int ID) { // no futuro esta funcao vai ter que ser
         setPaginas(ID);
         this.base = base; // expandida para setar todo contexto de execucao,
         this.limite = limite; // agora, setamos somente os registradores base,
@@ -50,8 +50,23 @@ public class Cpu {
         irpt = Interrupts.noInterrupt; // reset da interrupcao registrada
     }
 
+    //verifica se a traducao esta dentro do limite de paginas que foi informado para esse processo
+    private boolean legalTrad(int e) {
+        boolean valido = false;
+        for(Integer it: pagiProg){
+            if(it == e){
+                valido = true;
+                break;
+            }
+        }
+        if(!valido){
+            irpt = Interrupts.intEnderecoInvalido;
+        }
+        return valido;
+    }
+
     private boolean legal(int e) { // todo acesso a memoria tem que ser verificado
-        if ((e < base) || (e > limite)) { // valida se endereco 'e' na memoria ee posicao legal
+        if ((e < base) || (e > limite)) { // valida se endereco 'e' na memoria ee posicao legal            
             irpt = Interrupts.intEnderecoInvalido; // caso contrario ja liga interrupcao
             return false;
         };
